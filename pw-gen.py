@@ -29,8 +29,8 @@ def generate_password(length, use_upper, use_lower, use_numbers, use_special):
 
     # TODO: Display an error message if no character types are selected
     # HINT: Use an if statement to check if all options are False
-    if lowercase_chars and uppercase_chars and digit_chars and special_chars == False:
-        print("Error: No character types selected.")
+    if use_upper is False and use_lower is False and use_numbers is False and use_special is False:
+        print("Error: No character types selected..")
 
 def main():
     parser = argparse.ArgumentParser(
