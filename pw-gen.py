@@ -27,10 +27,39 @@ def generate_password(length, use_upper, use_lower, use_numbers, use_special):
     digit_chars = string.digits
     special_chars = string.punctuation
 
-    # TODO: Display an error message if no character types are selected
-    # HINT: Use an if statement to check if all options are False
-    if use_upper is False and use_lower is False and use_numbers is False and use_special is False:
-        print("Error: No character types selected..")
+    if not any([use_upper, use_lower, use_numbers, use_special]):
+        return "Error: You must select at least one character type (e.g., --upper, --lower, --numbers, --special)."
+    
+    if use_lower:
+        all_characters.extend(list(lowercase_chars))
+        guaranteed_characters.append(random.choice(lowercase_chars))
+    if use_upper:
+        all_characters.extend(list(uppercase_chars))
+        guaranteed_characters.append(random.choice(uppercase_chars))
+    if use_numbers:
+        all_characters.extend(list(digit_chars))
+        guaranteed_characters.append(random.choice(digit_chars))
+    if use_special:
+        all_characters.extend(list(special_chars))
+        guaranteed_characters.append(random.choice(special_chars))
+
+    if len(all_characters) == 0:
+        return "Error: No character types selected."
+
+    if length < len(guaranteed_characters):
+        return f"Error: Password length ({length}) is too short. It must be at least {len(guaranteed_characters)} to include all selected character types."
+
+    # Fill the rest of the password length with random choices from all_characters
+    password_list = guaranteed_characters[:] # Start with the guaranteed characters
+    remaining_length = length - len(guaranteed_characters)
+
+    for _ in range(remaining_length):
+        password_list.append(random.choice(all_characters))
+
+    # Shuffle the list to randomize the position of the guaranteed characters
+    random.shuffle(password_list)
+
+    return "".join(password_list)
 
 def main():
     parser = argparse.ArgumentParser(
